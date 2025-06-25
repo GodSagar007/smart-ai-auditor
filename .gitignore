@@ -1,0 +1,15 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Pytest cache
+.pytest_cache/
+
+# VS Code or JetBrains IDE folders (optional)
+.vscode/
+.idea/
+
+# Environment files (if using virtualenvs locally)
+.env/
+.venv/
