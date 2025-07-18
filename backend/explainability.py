@@ -73,3 +73,34 @@ def explain_with_lime(model, X_train, X_sample, feature_names=None, class_names=
     except Exception as e:
         print(f"⚠️ LIME explanation failed: {e}")
         return None
+        
+def explain_with_shap_ver2(model, X_sample, num_features=5):
+    import shap
+    import matplotlib.pyplot as plt
+
+    try:
+        # Check if the model supports shap.Explainer
+        if not hasattr(model, "predict"):
+            return {"error": "The model must have a 'predict()' method."}
+
+        # Some models work best with TreeExplainer, others with generic
+        try:
+            explainer = shap.Explainer(model, X_sample)
+        except Exception as e:
+            return {"error": f"SHAP failed to create an explainer: {e}"}
+
+        # Get shap values
+        shap_values = explainer(X_sample)
+
+        figures = []
+        for i in range(min(3, len(X_sample))):
+            fig = plt.figure()
+            shap.plots.waterfall(shap_values[i], max_display=num_features, show=False)
+            figures.append(fig)
+
+        return {"figures": figures}
+
+    except Exception as e:
+        return {"error": f"SHAP explanation failed: {e}"}
+
+
